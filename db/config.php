@@ -14,11 +14,19 @@
     // $db = mysql_select_db('directory', $mysql) or die(mysql_error());
 
     // Create connection
-	$conn = new mysqli($host, $username, $password, $db);
-
-	// Check connection
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	}
 	
+
+	try{
+            $link = new PDO("mysql:host=$host;dbname=$db","$username","$password");
+           
+        }catch(PDOException $ex){
+            die(json_encode(array(
+                'outcome' => false,
+                'message' => 'Unable to connect'
+            )));
+        }
+	// $statement = $link->prepare("INSERT INTO testtable(name, lastname, age)
+	//         VALUES('Bob','Desaunois','18')");
+
+	//     $statement->execute();	
  ?>

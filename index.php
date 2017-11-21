@@ -14,20 +14,18 @@
     <link rel="icon" type="image/png" href="http://codebasedev.com/directoryapp/directoryapp_108/favicon/favicon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
-    <link rel="stylesheet" href="http://codebasedev.com/directoryapp/directoryapp_108/templates/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
-    <!-- <script>
-var baseurl = 'http://codebasedev.com/directoryapp/directoryapp_108';
-</script> -->
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    
 </head>
 
-<body class="tpl-index">
+<body class="tpl-searchresults">
 	 <nav class="navbar navbar-default">
 	 	<div class="navbar-inner">
 	 	<div class="navbar-header">
             <div id="logo">
-               <!--  <a href="index.php"><img src="http://codebasedev.com/directoryapp/directoryapp_108/imgs/logo.png"></a> -->
             </div>
 
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar">
@@ -53,12 +51,16 @@ var baseurl = 'http://codebasedev.com/directoryapp/directoryapp_108';
             </form>
         </div>
     </div>
+    <div id="myDiv">
+        <img id="loading-image" src="img/ajax-loader1.gif"/>
+    </div>
     <div class="wrapper" style="height:400px;">
-    	<div class="full-block">
-    		<div id="dataresults">
-    			
-    		</div>
-    	</div>	
+    	
+        <div class="sidebar">
+            <input type="button" name="save" id="save" value="Download Excel">
+            <br>
+
+        </div>
     </div>
     <!-- .wrapper .home-page -->
 
@@ -108,8 +110,8 @@ var baseurl = 'http://codebasedev.com/directoryapp/directoryapp_108';
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="http://codebasedev.com/directoryapp/directoryapp_108/templates/lib/raty/jquery.raty.js"></script>
-    <script src="http://codebasedev.com/directoryapp/directoryapp_108/lib/jquery-autocomplete/jquery.autocomplete.min.js"></script>
+    <script src="js/jquery.raty.js"></script>
+    <script src="js/jquery.autocomplete.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/en.js"></script>
     <script>
         /* SELECT2 */
@@ -200,10 +202,14 @@ var baseurl = 'http://codebasedev.com/directoryapp/directoryapp_108';
     </script>
 
     <script type="text/javascript">
+        $(document).ready(function(){
+            $("#loading-image").hide();
+        });
     	$("#btn_search").click(function(){
-    		query = $("#query-input").val();
+
+            query = $("#query-input").val();
     		city = $("#city-input").text();
-    		
+    		$("#loading-image").show();
     		$.ajax({
 			    type: 'POST',
 			    data: { 
@@ -217,37 +223,20 @@ var baseurl = 'http://codebasedev.com/directoryapp/directoryapp_108';
 			    success: function(result){
 			        // call the function that handles the response/results
 			        console.log(result);
-			        $("#dataresults").html(result);
+			        $(".wrapper").html(result);
+                    $("#loading-image").hide();
 			    },
 
 			    error: function(){
+                    $("#loading-image").hide();
 			        window.alert("Wrong query : " + query);
 			    }
 			  });
     	});
+        
     </script>
-    <!-- Start of StatCounter Code for Default Guide -->
-    <!-- <script type="text/javascript">
-        var sc_project = 10993392;
-        var sc_invisible = 1;
-        var sc_security = "958a1291";
-        var scJsHost = (("https:" == document.location.protocol) ?
-            "https://secure." : "http://www.");
-        document.write("<sc" + "ript type='text/javascript' src='" +
-            scJsHost +
-            "statcounter.com/counter/counter.js'></" + "script>");
-    </script> -->
-    <!-- End of StatCounter Code for Default Guide -->
-    <!-- set rating -->
-    <!-- <script type="text/javascript">
-        $.fn.raty.defaults.path = 'http://codebasedev.com/directoryapp/directoryapp_108/templates/lib/raty/images';
-        $('.featured-item-rating').raty({
-            readOnly: true,
-            score: function() {
-                return this.getAttribute('data-rating');
-            }
-        });
-    </script> -->
+    
+
 </body>
 
 </html>
