@@ -18,7 +18,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
     <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
-    
+    <style type="text/css">
+        .modal {
+          position: absolute;
+          top: 55%;
+          left: 55%;
+          transform: translate(-50%, -50%);
+        }
+    </style>    
 </head>
 
 <body class="tpl-searchresults">
@@ -26,8 +33,9 @@
 	 	<div class="navbar-inner">
 	 	<div class="navbar-header">
             <div id="logo">
-            </div>
 
+            </div>
+            <p><h2>Business Directory</h2></p>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar">
 			<span class="sr-only">Toggle navigation</span>
 			<span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -51,28 +59,21 @@
             </form>
         </div>
     </div>
-    <div id="myDiv">
-        <img id="loading-image" src="img/ajax-loader1.gif"/>
-    </div>
+    
     <div class="wrapper" style="height:400px;">
     	
-        <div class="sidebar">
-            <input type="button" name="save" id="save" value="Download Excel">
-            <br>
-
-        </div>
     </div>
     <!-- .wrapper .home-page -->
 
     <div id="footer">
         <div id="footer-inner">
             <div class="footer-inner-left">
-                Business Directory </div>
+                <h3>expertwebscraper@gmail.com</h3> </div>
             <div class="footer-inner-right">
                 <ul>
-                    <li><a href="about">About</a></li>
-                    <li><a href="privacy-policy">Privacy Policy</a></li>
-                    <li><a href="contact">Contact</a>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </div>
             <div class="clear"></div>
@@ -81,10 +82,13 @@
     <!-- #footer -->
 
     <!-- modal city change -->
-    <div class="modal fade" id="change-city-modal" role="dialog" aria-labelledby="change-city-modal" aria-hidden="true">
+    <div class="modal fade loading" id="change-city-modal" role="dialog" aria-labelledby="change-city-modal" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+            <!-- <div class="modal-content"> -->
+                <div id="myDiv">
+                    <img id="loading-image" src="img/ajax-loader1.gif"/>
+                </div>
+                <!-- <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h3 class="modal-title" id="myModalLabel">Select your city</h3>
                 </div>
@@ -92,13 +96,13 @@
                     <form id="city-change-form" method="post">
                         <div class="block"><select id="city-change" name="city-change"></select></div>
                     </form>
-                </div>
+                </div> -->
                 <!-- .modal-body -->
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-blue" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="clear-city">Clear City</button>
-                </div>
-            </div>
+                </div> -->
+            <!-- </div> -->
             <!-- .modal-content -->
         </div>
         <!-- .modal-dialog -->
@@ -113,128 +117,7 @@
     <script src="js/jquery.raty.js"></script>
     <script src="js/jquery.autocomplete.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/en.js"></script>
-    <script>
-        /* SELECT2 */
-        // #city-input (main search form in header)
-  
-        $('#city-input').select2({
-            ajax: {
-                url: 'searchWhere.php',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        query: params.term, // search term
-                        page: params.page
-                    };
-                }
-            },
-            escapeMarkup: function(markup) {
-                return markup;
-            }, // let our custom formatter work
-            minimumInputLength: 1,
-            dropdownAutoWidth: true,
-            placeholder: "Select a city",
-            language: "en"
-        });
-
-        // #city-change (in modal triggered by navbar city change)
-        $('#city-change').select2({
-            ajax: {
-                url: 'searchWhere.php',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        query: params.term, // search term
-                        page: params.page
-                    };
-                }
-            },
-            escapeMarkup: function(markup) {
-                return markup;
-            }, // let our custom formatter work
-            minimumInputLength: 1,
-            dropdownAutoWidth: true,
-            placeholder: "Select a city",
-            language: "en"
-        });
-
-        // $(document.body).on('change', '#city-change', function() {
-        //     delete_cookie('city_name');
-        //     createCookie('city_id', this.value, 90);
-        //     location.reload(true);
-        // });
-
-        // $(document.body).on('click', '#clear-city', function(e) {
-        //     e.preventDefault();
-        //     delete_cookie('city_id');
-        //     delete_cookie('city_name');
-        //     location.reload(true);
-        // });
-
-        /* CUSTOM FUNCTIONS */
-        // function createCookie(name, value, days) {
-        //     var expires;
-        //     var cookie_path;
-        //     var path = "/directoryapp/directoryapp_108";
-
-        //     if (days) {
-        //         var date = new Date();
-        //         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        //         expires = "; expires=" + date.toUTCString();
-        //     } else {
-        //         expires = "";
-        //     }
-
-        //     if (path != '') {
-        //         cookie_path = "; path=" + path;
-        //     } else {
-        //         cookie_path = "";
-        //     }
-
-        //     document.cookie = name + "=" + value + expires + cookie_path;
-        // }
-
-        // function delete_cookie(name) {
-        //     createCookie(name, "", -100);
-        // }
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#loading-image").hide();
-        });
-    	$("#btn_search").click(function(){
-
-            query = $("#query-input").val();
-    		city = $("#city-input").text();
-    		$("#loading-image").show();
-    		$.ajax({
-			    type: 'POST',
-			    data: { 
-			    		query: query,
-			    		city :city
-			        },
-			    url: 'search.php',
-			    dataType: 'html',
-			    async: false,
-
-			    success: function(result){
-			        // call the function that handles the response/results
-			        console.log(result);
-			        $(".wrapper").html(result);
-                    $("#loading-image").hide();
-			    },
-
-			    error: function(){
-                    $("#loading-image").hide();
-			        window.alert("Wrong query : " + query);
-			    }
-			  });
-    	});
-        
-    </script>
+    <script  src="js/script.js"></script>
     
 
 </body>
