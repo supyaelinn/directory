@@ -82,6 +82,29 @@
     <!-- #footer -->
 
     <!-- modal city change -->
+    <div class="modal fade" id="change-city-modal" role="dialog" aria-labelledby="change-city-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+               
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h3 class="modal-title" id="myModalLabel">Select your city</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="city-change-form" method="post">
+                        <div class="block"><select id="city-change" name="city-change"></select></div>
+                    </form>
+                </div>
+                <!-- .modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-blue" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="clear-city">Clear City</button>
+                </div>
+            </div>
+            <!-- .modal-content -->
+        </div>
+        <!-- .modal-dialog -->
+    </div>
     <div class="modal fade loading" id="change-city-modal" role="dialog" aria-labelledby="change-city-modal" aria-hidden="true">
         <div class="modal-dialog">
             <!-- <div class="modal-content"> -->

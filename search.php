@@ -60,9 +60,22 @@
 			{
 				$arr['street']= $res['venue']['location']['crossStreet'];
 			}
-			$arr['city']= $res['venue']['location']['city'];
-			$arr['state']= $res['venue']['location']['state'];
-			$arr['postalCode']= $res['venue']['location']['postalCode'];
+			$arr['city'] = "";
+			if(array_key_exists("city", $res['venue']['location']))
+			{
+				$arr['city']= $res['venue']['location']['city'];
+			}
+			$arr['state'] = "";
+			if(array_key_exists("state", $res['venue']['location']))
+			{
+				$arr['state'] = $res['venue']['location']['state'];	
+			}
+			$arr['postalCode']= "";
+			if(array_key_exists("postalCode", $res['venue']['location']))
+			{
+				$arr['postalCode']= $res['venue']['location']['postalCode'];	
+			}
+			
 			$arr['country']= $res['venue']['location']['country'];
 			
 			$arr['formattedAddress'] = $arr['address'] . ' ,(' . $arr['street'] . '), ' . $arr['city'] . ' ' . $arr['state']. ' ' . $arr['postalCode']. ' , ' . $arr['country'];
@@ -73,26 +86,26 @@
 			$arr['lng']= $res['venue']['location']['lng'];
 			$arr['main_url']= $res['venue']['canonicalUrl'];
 
-			$html2 = file_get_contents($arr['main_url']);
+			// $html2 = file_get_contents($arr['main_url']);
 			
-			$html2 = str_get_html($html2);
+			// $html2 = str_get_html($html2);
 			$arr['phone'] = "";
 			$arr['website'] = "";
-			if(is_object($html2))
-			{
-				if(is_object($html2->find('span[class=tel]',0))){
-					$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
-				}	
-			// }
-			// echo $arr['phone'];exit;
+			// if(is_object($html2))
+			// {
+			// 	if(is_object($html2->find('span[class=tel]',0))){
+			// 		$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
+			// 	}	
+			// // }
+			// // echo $arr['phone'];exit;
 				
-				if(is_object($html2->find('a[class=url]',0))){
-					$arr['website'] = $html2->find('a[class=url]',0)->href;	
-				}
+			// 	if(is_object($html2->find('a[class=url]',0))){
+			// 		$arr['website'] = $html2->find('a[class=url]',0)->href;	
+			// 	}
 			
-			}else{
-				continue;
-			}
+			// }else{
+			// 	continue;
+			// }
 
 			// $stmt->bindValue($i++, $arr);
 			array_push($sqlQuery, $arr);
@@ -146,18 +159,22 @@
 		echo "<div class='content-col'>";
 		echo "<div class='list-items'>";
 		$i = 1;
+		echo "<form name='data' action='export.php' method='POST' target='hidden-form'>";
+		echo '<input type="submit" name="save" value="Export Excel">';
 		foreach ($sqlQuery as  $res) {
 		if($res['name'] != ""){
 ?>
-		<div class="item" data-ad_id="<?php $res['id'] ?>">
-			<div class="item-pic" id="<?php $res['id'] ?>">
+		
+		<div class="item" data-ad_id="<?= $res['id'] ?>">
+			<div class="item-pic" id="<?= $res['id'] ?>">
 				<img src="http://codebasedev.com/directoryapp/directoryapp_108/place_pic_thumb/1/17.03.15.16.39-1489621182.898-51555235.jpg">
 			</div><!-- .item-pic -->
 
 			<div class="item-description">
 				<div class="item-title-row">
-					<div class="item-counter"><div class="item-counter-inner"><?= $i++ ?></div></div>
-
+					<div class="item-counter"><div class="item-counter-inner"><?= $i ?></div></div>
+					<input type="hidden" name="item[<?= $i ?>]['name']" value="<?= $res['name'] ?>">
+					<input type="hidden" name="item[<?= $i ?>]['main_url']" value="<?= $res['main_url'] ?>">
 					<h2><a href="<?= $res['main_url'] ?>" title="<?= $res['name'] ?>"><?= $res['name'] ?></a></h2>
 				</div>
 				<div class="item-ratings-wrapper">
@@ -171,14 +188,17 @@
 				<div class="item-info">
 					<div class="item-addr">
 					<?php if($res['formattedAddress'] != "null"){ ?>
+						<input type="hidden" name="item[<?= $i ?>]['formatedaddress']" value="<?= $res['formattedAddress'] ?>">
 						<strong><?= str_replace("<\/span>","",$res['formattedAddress']) ?></strong>
 					<?php } ?>
 					</div>
 
 					<div class="item-phone">
+						<input type="hidden" name="item[<?= $i ?>]['phone']" value="<?= $res['phone'] ?>">
 						<i class="fa fa-phone-square"></i><?= $res['phone'] ?>
 					</div>
 					<div class="item-url">
+						<input type="hidden" name="item[<?= $i ?>]['website']" value="<?= $res['website'] ?>">
 						<i class="fa fa-website"></i><?= $res['website'] ?>
 					</div>
 				</div>
@@ -188,9 +208,10 @@
 		</div>
 
 <?php 	
+		$i++;
 		}	
 		}
-
+		echo '</form>';
 		echo "</div>";
 		echo "</div>";
 		// echo "</div>";
@@ -199,5 +220,49 @@
 
  ?>
  	<div class="sidebar">
- 		<input type="button" name="save" id="save" value="Export Excel">
+ 		<!-- <input type="button" name="save" id="save" value="Export Excel"> -->
  	</div>
+ 	<script type="text/javascript">
+ 		$("#save").click(function(){
+ 			data = $("form[name=data]").serialize();
+ 			// $("form[name=data]").ajaxSubmit({url: 'export.php', type: 'post',data: data});
+ 			$.post('export.php',data);
+ 			// $.ajax( {
+		  //     type: "POST",
+		  //     url: 'export.php',
+		  //     data: data,
+		  //     success: function( response ) {
+		  //     	window.open(this.url,'_blank' );
+		  //     //    var $a = $("<a>");
+				//     // $a.attr("href",data.file);
+				//     // $("body").append($a);
+				//     // $a.attr("download","file.xls");
+				//     // $a[0].click();
+				//     // $a.remove();
+		  //     }
+		  //   } );
+ 			// $.ajax({
+	   //          type: 'POST',
+	   //          data: data,
+	   //          url: 'export.php',
+	   //          dataType: 'json',
+	   //          // async: false,
+	   //          success: function(result){
+	   //              // call the function that handles the response/results
+	   //               console.log(result);
+	   //              //$(".wrapper").html(result);
+	   //              //$('.loading').modal('toggle');
+	                
+	   //          },
+	   //          error: function(){
+	                
+	   //              window.alert("Wrong query : ");
+	   //              //$('.loading').modal('toggle');
+	   //              //$("#btn_search").click();
+	   //          }
+	   //        });
+ 			// $(".item").each(function(){
+ 			// 	console.log($(this).val());
+ 			// });
+ 		});
+ 	</script>
