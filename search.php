@@ -86,9 +86,9 @@
 			$arr['lng']= $res['venue']['location']['lng'];
 			$arr['main_url']= $res['venue']['canonicalUrl'];
 
-			// $html2 = file_get_contents($arr['main_url']);
+			$html2 = file_get_contents($arr['main_url']);
 			
-			// $html2 = str_get_html($html2);
+			$html2 = str_get_html($html2);
 			$arr['phone'] = "";
 			$arr['website'] = "";
 			if(is_object($html2))
@@ -96,7 +96,7 @@
 				if(is_object($html2->find('span[class=tel]',0))){
 					$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
 				}	
-			}
+			// }
 			// echo $arr['phone'];exit;
 				
 				if(is_object($html2->find('a[class=url]',0))){

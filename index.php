@@ -5,13 +5,13 @@
 <head>
     <title>Business Directory</title>
     <meta name="description" content="Business Directory is a nationwide business directory where users can search for the businesses near them and write reviews." />
-    <link rel="canonical" href="http://codebasedev.com/directoryapp/directoryapp_108" />
+    <link rel="canonical" href="#" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon-precomposed" href="http://codebasedev.com/directoryapp/directoryapp_108/favicon/favicon-152.png">
+    <link rel="apple-touch-icon-precomposed" href="img/favicon-152.png">
     <meta name="msapplication-TileColor" content="#FFFFFF">
-    <meta name="msapplication-TileImage" content="http://codebasedev.com/directoryapp/directoryapp_108/favicon/favicon-144.png">
-    <link rel="icon" type="image/png" href="http://codebasedev.com/directoryapp/directoryapp_108/favicon/favicon.png">
+    <meta name="msapplication-TileImage" content="img/favicon-152.png">
+    <link rel="icon" type="image/png" href="img/favicon-152.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -35,7 +35,7 @@
             <div id="logo">
 
             </div>
-            <p><h2>Business Directory</h2></p>
+            <p><h2><img src="img/favicon-152.png" width ="30px;">Business Directory</h2></p>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar">
 			<span class="sr-only">Toggle navigation</span>
 			<span class="glyphicon glyphicon-menu-hamburger"></span>
