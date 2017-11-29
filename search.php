@@ -14,7 +14,7 @@
 		//New+York%2C+NY
 		$token = "FQ1A4CO0PTLLFHGWKUD0QQDEMH3C21MVTHVLE2HY3G5NDHE1";
 		$url = "https://api.foursquare.com/v2/search/recommendations?
-		locale=en&explicit-lang=false&v=20171114&m=foursquare&query=".$query."&mode=locationInput&limit=10&noGeoSplitting=1&near=".$city."&wsid=HKZK03NHMOELZUDGDOE0ILY0SZC1SN&oauth_token=".$token."";
+		locale=en&explicit-lang=false&v=20171114&m=foursquare&query=".$query."&mode=locationInput&limit=50&noGeoSplitting=1&near=".$city."&wsid=HKZK03NHMOELZUDGDOE0ILY0SZC1SN&oauth_token=".$token."";
 		
 		$html = file_get_contents($url);
 		
@@ -48,49 +48,50 @@
 		if(array_key_exists("venue", $res)){
 	        // for($i=0; $i<count($result); $i++) {
 			$arr = array();
-			$arr['list_id']= $res['venue']['id'];
+			$arr['id']= $res['venue']['id'];
 			$arr['name']= $res['venue']['name'];
 			$arr['address'] = "";
 			if(array_key_exists("address",$res['venue']['location']))
 			{
-				$arr['address']= $res['venue']['location']['address'];
+				$arr['location']['address']= $res['venue']['location']['address'];
 			}
 			$arr['street'] = "";
 			if(array_key_exists("crossStreet", $res['venue']['location']))
 			{
-				$arr['street']= $res['venue']['location']['crossStreet'];
+				$arr['location']['street']= $res['venue']['location']['crossStreet'];
 			}
 			$arr['city'] = "";
 			if(array_key_exists("city", $res['venue']['location']))
 			{
-				$arr['city']= $res['venue']['location']['city'];
+				$arr['location']['city']= $res['venue']['location']['city'];
 			}
 			$arr['state'] = "";
 			if(array_key_exists("state", $res['venue']['location']))
 			{
-				$arr['state'] = $res['venue']['location']['state'];	
+				$arr['location']['state'] = $res['venue']['location']['state'];	
 			}
 			$arr['postalCode']= "";
 			if(array_key_exists("postalCode", $res['venue']['location']))
 			{
-				$arr['postalCode']= $res['venue']['location']['postalCode'];	
+				$arr['location']['postalCode']= $res['venue']['location']['postalCode'];	
 			}
 			
-			$arr['country']= $res['venue']['location']['country'];
+			$arr['location']['country']= $res['venue']['location']['country'];
 			
-			$arr['formattedAddress'] = $arr['address'] . ' ,(' . $arr['street'] . '), ' . $arr['city'] . ' ' . $arr['state']. ' ' . $arr['postalCode']. ' , ' . $arr['country'];
+			$arr['formattedAddress'] = $arr['location']['address'] . ' ,(' . $arr['location']['street'] . '), ' . $arr['location']['city'] . ' ' . $arr['location']['state']. ' ' . $arr['location']['postalCode']. ' , ' . $arr['location']['country'];
 			//$address= str_replace("\",\"",",",$res['venue']['location']['formattedAddress']));
 			// $arr['formattedAddress'] = rtrim(ltrim($res['venue']['location']['formattedAddress'],"[\""),"\"]");
 			// echo $arr['formattedAddress'];
 			$arr['lat']= $res['venue']['location']['lat'];
 			$arr['lng']= $res['venue']['location']['lng'];
-			$arr['main_url']= $res['venue']['canonicalUrl'];
+			$arr['canonicalUrl']= $res['venue']['canonicalUrl'];
 
-			$html2 = file_get_contents($arr['main_url']);
+			$html2 = file_get_contents($arr['canonicalUrl']);
 			
 			$html2 = str_get_html($html2);
 			$arr['phone'] = "";
 			$arr['website'] = "";
+			// $arr['facebookUsername'] = "";
 			if(is_object($html2))
 			{
 				if(is_object($html2->find('span[class=tel]',0))){
@@ -102,167 +103,142 @@
 				if(is_object($html2->find('a[class=url]',0))){
 					$arr['website'] = $html2->find('a[class=url]',0)->href;	
 				}
-			
+				
+
 			}else{
 				continue;
 			}
 
 			// $stmt->bindValue($i++, $arr);
 			array_push($sqlQuery, $arr);
-			// $sql = "INSERT INTO list (list_id, name, address, street, city, state, postalCode, country, formatedaddress, lat, lng, main_url) VALUES
- 	      	// ";
-			// $sql .= '('.
-			// 	'"'.$arr['list_id'].'","'.$arr['name'].'","'.$arr['address'].'","'.$arr['street'].'","'.$arr['city'].'","'.$arr['state'].'","'.$arr['postalCode'].'","'.$arr['country'].'","'.$arr['formattedAddress'].'","'.$arr['lat'].'","'.$arr['lng'].'","'.$arr['main_url'] . '")';
-			// echo $sql;
-			// $query = mysql_query($sql);
-			// echo $query;
-			// $query = mysql_query("CALL insert_list(".$arr['list_id'].",".$arr['name'].",".$arr['address'].",".$arr['street'].",".$arr['city'].",".$arr['state'].",".$arr['postalCode'].",".$arr['country'].",".$arr['formattedAddress'].",".$arr['lat'].",".$arr['lng'].",".$arr['main_url'].")");
-
-			// $statement->bindParam(':list_id', $arr['list_id'], PDO::PARAM_STR);  
-			// $statement->bindParam(':name', $arr['name'], PDO::PARAM_STR);  
-			// $statement->bindParam(':address', $arr['address'], PDO::PARAM_STR);  
-			// $statement->bindParam(':street', $arr['street'], PDO::PARAM_STR);  
-			// $statement->bindParam(':city', $arr['city'], PDO::PARAM_STR);  
-			// $statement->bindParam(':state', $arr['state'], PDO::PARAM_STR);  
-			// $statement->bindParam(':postalCode', $arr['postalCode'], PDO::PARAM_STR);  
-			// $statement->bindParam(':country', $arr['country'], PDO::PARAM_STR);  
-			// $statement->bindParam(':formattedAddress', $arr['formattedAddress'], PDO::PARAM_STR);  
-			// $statement->bindParam(':lat', $arr['lat'], PDO::PARAM_STR);  
-			// $statement->bindParam(':lng', $arr['lng'], PDO::PARAM_STR);  
-			// $statement->bindParam(':main_url', $arr['main_url'], PDO::PARAM_STR);  
-
 			
-
 		}
 			// exit;
 		}
 
-		
-		// $sql .= rtrim($sql,",");
-		// $sql = str_replace(", ,","," , $sql);
-		// echo $sql;
-		// mysql_query($sql);
-		// echo $sql;exit;
-		// if(mysqli_query($mysql, $sql)){
-		//     echo "Records added successfully.";
-		// } else{
-		//     echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-		// }
-		 
-		// // Close connection
-		// mysqli_close($mysql);
-
-		// $statement->execute();		
 		echo "<h1>".$total." results in " .$_POST['city']. "</h1>";
-		echo "<h3> Limited 10 Results only for demo </h3>";
-		// echo "<div class='full-block' style='height:4300px;'>";
-		echo "<div class='content-col'>";
-		echo "<div class='list-items'>";
-		$i = 1;
-		echo "<form name='data' action='export.php' method='POST' target='hidden-form'>";
-		echo '<input type="submit" name="save" value="Export Excel">';
-		foreach ($sqlQuery as  $res) {
-		if($res['name'] != ""){
-?>
-		
-		<div class="item" data-ad_id="<?= $res['id'] ?>">
-			<div class="item-pic" id="<?= $res['id'] ?>">
-				<img src="http://codebasedev.com/directoryapp/directoryapp_108/place_pic_thumb/1/17.03.15.16.39-1489621182.898-51555235.jpg">
-			</div><!-- .item-pic -->
-
-			<div class="item-description">
-				<div class="item-title-row">
-					<div class="item-counter"><div class="item-counter-inner"><?= $i ?></div></div>
-					<input type="hidden" name="item[<?= $i ?>]['name']" value="<?= $res['name'] ?>">
-					<input type="hidden" name="item[<?= $i ?>]['main_url']" value="<?= $res['main_url'] ?>">
-					<h2><a href="<?= $res['main_url'] ?>" title="<?= $res['name'] ?>"><?= $res['name'] ?></a></h2>
-				</div>
-				<div class="item-ratings-wrapper">
-					<div class="item-rating" data-rating="5.000000" title="gorgeous">
-						
-				</div>
-					<div class="item-ratings-count">
-						 									</div>
-					<div class="clear"></div>
-				</div><!-- .item-ratings-wrapper -->
-				<div class="item-info">
-					<div class="item-addr">
-					<?php if($res['formattedAddress'] != "null"){ ?>
-						<input type="hidden" name="item[<?= $i ?>]['formatedaddress']" value="<?= $res['formattedAddress'] ?>">
-						<strong><?= str_replace("<\/span>","",$res['formattedAddress']) ?></strong>
-					<?php } ?>
-					</div>
-
-					<div class="item-phone">
-						<input type="hidden" name="item[<?= $i ?>]['phone']" value="<?= $res['phone'] ?>">
-						<i class="fa fa-phone-square"></i><?= $res['phone'] ?>
-					</div>
-					<div class="item-url">
-						<input type="hidden" name="item[<?= $i ?>]['website']" value="<?= $res['website'] ?>">
-						<i class="fa fa-website"></i><?= $res['website'] ?>
-					</div>
-				</div>
-				</div>
-
-			<div class="clear"></div>
-		</div>
-
-<?php 	
-		$i++;
-		}	
-		}
-		echo '</form>';
-		echo "</div>";
-		echo "</div>";
-		// echo "</div>";
+		echo "<h3> Limited 50 Results only for demo </h3>";
 		
 	}
 
  ?>
- 	<div class="sidebar">
- 		<!-- <input type="button" name="save" id="save" value="Export Excel"> -->
- 	</div>
- 	<script type="text/javascript">
- 		$("#save").click(function(){
- 			data = $("form[name=data]").serialize();
- 			// $("form[name=data]").ajaxSubmit({url: 'export.php', type: 'post',data: data});
- 			$.post('export.php',data);
- 			// $.ajax( {
-		  //     type: "POST",
-		  //     url: 'export.php',
-		  //     data: data,
-		  //     success: function( response ) {
-		  //     	window.open(this.url,'_blank' );
-		  //     //    var $a = $("<a>");
-				//     // $a.attr("href",data.file);
-				//     // $("body").append($a);
-				//     // $a.attr("download","file.xls");
-				//     // $a[0].click();
-				//     // $a.remove();
-		  //     }
-		  //   } );
- 			// $.ajax({
-	   //          type: 'POST',
-	   //          data: data,
-	   //          url: 'export.php',
-	   //          dataType: 'json',
-	   //          // async: false,
-	   //          success: function(result){
-	   //              // call the function that handles the response/results
-	   //               console.log(result);
-	   //              //$(".wrapper").html(result);
-	   //              //$('.loading').modal('toggle');
-	                
-	   //          },
-	   //          error: function(){
-	                
-	   //              window.alert("Wrong query : ");
-	   //              //$('.loading').modal('toggle');
-	   //              //$("#btn_search").click();
-	   //          }
-	   //        });
- 			// $(".item").each(function(){
- 			// 	console.log($(this).val());
- 			// });
- 		});
- 	</script>
+ 	
+<div class="block">
+	<a class="btn btn-blue" href="download.php">Download CSV</a>
+	<!-- <a class="btn btn-default show-form" href="#">Show form</a> -->
+</div>
+<div class="table-responsive">
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th></th>
+			<th>Name</th>
+			<th>Address</th>
+			<th>Street</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Postal Code</th>
+			<th>Phone</th>
+			<th>Website</th>
+			<th>Lat Long</th>
+			
+		</tr>
+
+		<?php
+		$count = 1;
+		$csv = array();
+		foreach($sqlQuery as $k => $v) {
+		if($v['name'] != ""){
+			// $v = array();
+			
+			$name          = (!empty($v['name']))                        ? $v['name']                          : '';
+			$v_foursq_id   = (!empty($v['id']))                          ? $v['id']                            : '';
+			$v_foursq_url  = (!empty($v['canonicalUrl']))                ? $v['canonicalUrl']                  : '';
+			$v_address     = (!empty($v['location']['address']))         ? $v['location']['address']           : '';
+			$v_street       = (!empty($v['location']['street']))           ? $v['location']['street']
+							: '';
+
+			$v_city        = (!empty($v['location']['city']))            ? $v['location']['city']              : '';
+			$v_state       = (!empty($v['location']['state']))           ? $v['location']['state']             : '';
+			$v_postalCode       = (!empty($v['location']['postalCode']))           ? $v['location']['postalCode']: '';
+
+			$v_country       = (!empty($v['location']['country']))           ? $v['location']['country']: '';
+
+			$v_formattedAddress = (!empty($v['formattedAddress']))           ? $v['formattedAddress']: '';
+
+			$v_lat = (!empty($v['lat']))           ? $v['lat']: '';
+			$v_lng = (!empty($v['lng']))           ? $v['lng']: '';
+
+			$v_phone       = (!empty($v['phone']))   ? $v['phone']     : '';
+			$v_website     = (!empty($v['website']))                         ? $v['website']                           : '';
+			// $v_lat         = (!empty($v['location']['lat']))             ? $v['location']['lat']               : '';
+			// $v_lng         = (!empty($v['location']['lng']))             ? $v['location']['lng']               : '';
+			// $v_postal_code = (!empty($v['location']['postalCode']))      ? $v['location']['postalCode']        : '';
+			// $v_menu        = (!empty($v['menu']['url']))                 ? $v['menu']['url']                   : '';
+			// $v_tags        = (!empty($v['tags']))                        ? $v['tags']                          : '';
+			// $v_checkins    = (!empty($v['stats']['checkinsCount']))      ? $v['stats']['checkinsCount']        : 0;
+			// $v_users       = (!empty($v['stats']['usersCount']))         ? $v['stats']['usersCount']           : 0;
+			// $v_facebook    = (!empty($v['contact']['facebookUsername'])) ? $v['contact']['facebookUsername']   : '';
+			// $v_twitter     = (!empty($v['contact']['twitter']))          ? $v['contact']['twitter']            : '';
+
+			// // lat/lng
+			$v_latlng_display = '';
+			if(!empty($v_lat) && !empty($v_lng)) {
+				$v_latlng_display = $v_lat . ',' . $v_lng;
+			}
+
+			// // tags
+			// if(is_array($v_tags)) {
+			// 	$v_tags = implode(', ', $v_tags);
+			// }
+
+			// // create csv row
+			$this_loop = array();
+
+			$this_loop[] = $name;
+			$this_loop[] = $v_foursq_id     ; 
+			$this_loop[] = $v_address       ; 
+			$this_loop[] = $v_city          ; 
+			$this_loop[] = $v_state         ; 
+			$this_loop[] = $v_phone         ; 
+			$this_loop[] = $v_website       ; 
+			$this_loop[] = $v_latlng_display; 
+			$this_loop[] = $v_postalCode   ; 
+			// if($menu        == 1) { $this_loop[] = $v_menu          ; }
+			// if($tags        == 1) { $this_loop[] = $v_tags          ; }
+			// if($checkins    == 1) { $this_loop[] = $v_checkins      ; }
+			// if($users       == 1) { $this_loop[] = $v_users         ; }
+			// if($facebook    == 1) { $this_loop[] = $v_facebook      ; }
+			// if($twitter     == 1) { $this_loop[] = $v_twitter       ; }
+
+			$row = $this_loop;
+
+			// add row to csv
+			$csv[] = $row;
+			?>
+			<tr>
+				<td><?= $count; ?></td>
+				<td><a href="<?= $v_foursq_url ?>" target="_blank"><?= $name; ?></a></td>
+				<td><?= $v_address       ; ?></td>
+				<td><?= $v_street       ; ?></td>
+				<td style="white-space: nowrap"><?= $v_city; ?></td>
+				<td style="white-space: nowrap"><?= $v_state; ?></td>
+				<td style="white-space: nowrap"><?= $v_postalCode; ?></td>
+				<td style="white-space: nowrap"><?= $v_phone; ?></td>
+				<td><a href="<?= $v_website; ?>" target="_blank"><?= $v_website; ?></a></td>
+				<td><?= $v_latlng_display; ?></td>
+				
+				<!-- <?php if($menu        == 1) { ?><td><a href="<?= $v_menu          ; ?>" target="_blank"><?= $v_menu          ; ?></a></td> <?php } ?>
+				
+				<?php if($tags        == 1) { ?><td><?= $v_tags          ; ?></td> <?php } ?>
+				<?php if($checkins    == 1) { ?><td><?= $v_checkins      ; ?></td> <?php } ?>
+				<?php if($users       == 1) { ?><td><?= $v_users         ; ?></td> <?php } ?>
+				<?php if($facebook    == 1) { ?><td><a href="http://facebook.com/<?= $v_facebook; ?>" target="_blank"><?= $v_facebook; ?></a></td> <?php } ?>
+				<?php if($twitter     == 1) { ?><td><a href="http://twitter.com/<?= $v_twitter; ?>" target="_blank"><?= $v_twitter; ?></a></td> <?php } ?> -->
+			</tr>
+			<?php
+			$count++;
+			}
+		}
+		?>
+	</table>
+</div>
