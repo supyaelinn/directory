@@ -91,21 +91,21 @@
 			// $html2 = str_get_html($html2);
 			$arr['phone'] = "";
 			$arr['website'] = "";
-			// if(is_object($html2))
-			// {
-			// 	if(is_object($html2->find('span[class=tel]',0))){
-			// 		$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
-			// 	}	
-			// // }
-			// // echo $arr['phone'];exit;
-				
-			// 	if(is_object($html2->find('a[class=url]',0))){
-			// 		$arr['website'] = $html2->find('a[class=url]',0)->href;	
-			// 	}
-			
-			// }else{
-			// 	continue;
+			if(is_object($html2))
+			{
+				if(is_object($html2->find('span[class=tel]',0))){
+					$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
+				}	
 			// }
+			// echo $arr['phone'];exit;
+				
+				if(is_object($html2->find('a[class=url]',0))){
+					$arr['website'] = $html2->find('a[class=url]',0)->href;	
+				}
+			
+			}else{
+				continue;
+			}
 
 			// $stmt->bindValue($i++, $arr);
 			array_push($sqlQuery, $arr);
