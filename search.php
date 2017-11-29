@@ -96,7 +96,7 @@
 				if(is_object($html2->find('span[class=tel]',0))){
 					$arr['phone'] = $html2->find('span[class=tel]',0)->innertext;
 				}	
-			// }
+			}
 			// echo $arr['phone'];exit;
 				
 				if(is_object($html2->find('a[class=url]',0))){
