@@ -122,11 +122,13 @@
 	}
 
  ?>
- 	
+
+		<!-- <div class='list-items'> -->
 <div class="block">
 	<a class="btn btn-blue" href="download.php">Download CSV</a>
 	<!-- <a class="btn btn-default show-form" href="#">Show form</a> -->
 </div>
+<div class='content-col'>
 <div class="table-responsive">
 	<table class="table table-striped table-condensed">
 		<tr>
@@ -241,4 +243,6 @@
 		}
 		?>
 	</table>
+</div>
+<!-- </div> -->
 </div>
