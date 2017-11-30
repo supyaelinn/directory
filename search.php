@@ -1,5 +1,5 @@
 <?php 
-	ini_set('display_errors', '1');
+	// ini_set('display_errors', '1');
 	ini_set('max_execution_time', 1000);
 	// set_time_limit(0);
 	// require("db/config.php");
