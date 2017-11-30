@@ -50,17 +50,17 @@
 			$arr = array();
 			$arr['id']= $res['venue']['id'];
 			$arr['name']= $res['venue']['name'];
-			$arr['address'] = "";
+			$arr['location']['address'] = "";
 			if(array_key_exists("address",$res['venue']['location']))
 			{
 				$arr['location']['address']= $res['venue']['location']['address'];
 			}
-			$arr['street'] = "";
+			$arr['location']['street'] = "";
 			if(array_key_exists("crossStreet", $res['venue']['location']))
 			{
 				$arr['location']['street']= $res['venue']['location']['crossStreet'];
 			}
-			$arr['city'] = "";
+			$arr['location']['city'] = "";
 			if(array_key_exists("city", $res['venue']['location']))
 			{
 				$arr['location']['city']= $res['venue']['location']['city'];
@@ -70,7 +70,7 @@
 			{
 				$arr['location']['state'] = $res['venue']['location']['state'];	
 			}
-			$arr['postalCode']= "";
+			$arr['location']['postalCode']= "";
 			if(array_key_exists("postalCode", $res['venue']['location']))
 			{
 				$arr['location']['postalCode']= $res['venue']['location']['postalCode'];	
